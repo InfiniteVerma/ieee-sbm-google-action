@@ -27,7 +27,6 @@ app.intent('Default Welcome Intent', (conv) => {
     );
     conv.ask(new Suggestions('Yes', 'No'));
   }
-
 });
 
 // Handle the Dialogflow intent named 'actions_intent_PERMISSION'. If user
@@ -47,7 +46,7 @@ app.intent('actions_intent_PERMISSION', (conv, params, permissionGranted) => {
 // The user says 'yes' if he/she is a fresher
 app.intent('Default Welcome Intent - yes', (conv) => {
   conv.ask('A warm welcome to Manipal from the entire IEEE Manipal Branch! ' +
-    'We are participating in the Fresher’s Fair to introduce our club ');
+    'We are participating in the Fresher’s Fair to introduce our club.' + ' ');
   if (conv.user.storage.userName) {
     conv.ask(`Would you like to know more about the fair, ${conv.user.storage.userName}?`);
   } else {
@@ -135,6 +134,18 @@ const conDetails = {
     display: 'WHITE',
   }
 }
+
+//No intent doesn't work yet
+app.intent('No Input', (conv) => {
+  const repromptCount = parseInt(conv.arguments.get('REPROMPT_COUNT'));
+  if (repromptCount === 0) {
+  conv.ask(`What was that?`);
+  } else if (repromptCount === 1) {
+  conv.ask(`Sorry I didn't catch that. Could you repeat yourself?`);
+  } else if (conv.arguments.get('IS_FINAL_REPROMPT')) {
+  conv.close(`Okay let's try this again later.`);
+  }
+});
 
 exports.yourAction = functions.https.onRequest(app);
 
