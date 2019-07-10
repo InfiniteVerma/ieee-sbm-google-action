@@ -73,7 +73,8 @@ app.intent('Default Welcome Intent - no', (conv) => {
 app.intent('Default Welcome Intent - yes - yes', (conv) => {
   conv.ask('The fair will start from the 1st Saturday, i.e. 27th July and ' +
     'will continue for 4 weeks till 18th August. It’ll happen only on weekends. ' +
-    'I really want up but I can\'t set up a reminder for it right now. ');
+    'I really want to but I can\'t set up a reminder for it right now. ' +
+    'My developer\'s really lazy.');
   conv.ask('Would you like to know anything else?');
   conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details'));
 });
@@ -93,12 +94,17 @@ app.intent('Contact Details', (conv, { contactDetails }) => {
 
 // Handle the Dialogflow intent 'Recruitment Information'
 app.intent('Recruitment Information', (conv, { recruitInfo }) => {
-  conv.close('I have no information regarding recruitment as of now. Kindly come back later.');
+  if(conv.user.storage.userName){
+    conv.close(`We\'re happy to see your enthusiasm, ${conv.user.storage.userName}.`);
+  }else{
+    conv.close('We\'re happy to see your enthusiasm!');
+  }
+  conv.close('Recruitment will start after the fresher\'s ban. Follow our facebook page for quick updates',
+    new BasicCard(conDetails['Facebook Page']));
 });
 
 // Handle the Dialogflow intent 'Upcoming Events'
 app.intent('Upcoming Events', (conv, { upcomingEvents }) => {
-  //conv.close('I have no upcoming event information as of now. Please come back later');
   conv.close(`Here's the upcoming event`, new BasicCard(upEvents['Fresher\'s Week']));
 });
 
