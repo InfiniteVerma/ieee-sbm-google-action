@@ -4,6 +4,7 @@ const {
   dialogflow,
   Suggestions,
   Permission,
+  BasicCard,
 } = require('actions-on-google');
 const functions = require('firebase-functions');
 
@@ -70,9 +71,11 @@ app.intent('Default Welcome Intent - no', (conv) => {
 // Handle the Dialogflow follow up intent 'Yes' of the previous 'Yes' intent
 // If the user is a fresher and wants to know more about the fresher's week
 app.intent('Default Welcome Intent - yes - yes', (conv) => {
-  conv.close('The fair will start from the 1st Saturday, i.e. 27th July and ' +
+  conv.ask('The fair will start from the 1st Saturday, i.e. 27th July and ' +
     'will continue for 4 weeks till 18th August. It’ll happen only on weekends. ' +
-    'If you’re not sure whether you’ll remember the dates, can I set up a reminder for you?');
+    'I really want up but I can\'t set up a reminder for it right now. ');
+  conv.ask('Would you like to know anything else?');
+  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details'));
 });
 
 // Handle the Dialogflow follow up intent 'No' of the previous 'Yes' intent
@@ -84,18 +87,49 @@ app.intent('Default Welcome Intent - yes - no', (conv) => {
 
 // Handle the Dialogflow intent 'Contact Details'
 app.intent('Contact Details', (conv, { contactDetails }) => {
-  conv.close('I have no contact details at the moment. Kindly come back later.');
+  //conv.close('I have no contact details at the moment. Kindly come back later.');
+  conv.close(`Here's the upcoming event`, new BasicCard(conDetails['Facebook Page']));
 });
 
 // Handle the Dialogflow intent 'Recruitment Information'
 app.intent('Recruitment Information', (conv, { recruitInfo }) => {
   conv.close('I have no information regarding recruitment as of now. Kindly come back later.');
-})
+});
 
 // Handle the Dialogflow intent 'Upcoming Events'
 app.intent('Upcoming Events', (conv, { upcomingEvents }) => {
-  conv.close('I have no upcoming event information as of now. Please come back later');
-})
+  //conv.close('I have no upcoming event information as of now. Please come back later');
+  conv.close(`Here's the upcoming event`, new BasicCard(upEvents['Fresher\'s Week']));
+});
+
+const upEvents = {
+  'Fresher\'s Week': {
+    title: 'Fresher\'s Week',
+    text: 'From 27th July to 18th August on Saturdays and Sundays',
+    image: {
+      url: 'https://mocah.org/thumbs/125206-crystals-material-design-colorful-minimal-4k.jpg',
+      accessibilityText: 'Fresher\'s Week Image',
+    },
+    display: 'WHITE',
+  },
+};
+
+const conDetails = {
+  'Facebook Page': {
+    title: 'Facebook Page',
+    buttons: [{
+      title: 'URL to page',
+      openUrlAction: {
+        url: 'https://www.facebook.com/ieeesbmanipal/?ref=br_rs',
+      }
+    },],
+    image: {
+      url: 'https://mocah.org/thumbs/125206-crystals-material-design-colorful-minimal-4k.jpg',
+      accessibilityText: 'Fresher\'s Week Image',
+    },
+    display: 'WHITE',
+  }
+}
 
 exports.yourAction = functions.https.onRequest(app);
 
