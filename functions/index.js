@@ -47,8 +47,7 @@ app.intent('actions_intent_PERMISSION', (conv, params, permissionGranted) => {
 // The user says 'yes' if he/she is a fresher
 app.intent('Default Welcome Intent - yes', (conv) => {
   conv.ask('A warm welcome to Manipal from the entire IEEE Manipal Branch! ' +
-    'We’re going to be participating in the Fresher’s Fair to introduce our club ' +
-    'and it’s members. ');
+    'We are participating in the Fresher’s Fair to introduce our club ');
   if (conv.user.storage.userName) {
     conv.ask(`Would you like to know more about the fair, ${conv.user.storage.userName}?`);
   } else {
@@ -71,9 +70,9 @@ app.intent('Default Welcome Intent - no', (conv) => {
 // Handle the Dialogflow follow up intent 'Yes' of the previous 'Yes' intent
 // If the user is a fresher and wants to know more about the fresher's week
 app.intent('Default Welcome Intent - yes - yes', (conv) => {
-  conv.ask('The fair will start from the 1st Saturday, i.e. 27th July and ' +
-    'will continue for 4 weeks till 18th August. It’ll happen only on weekends. ' +
-    'I really want to but I can\'t set up a reminder for it right now. ' +
+  conv.ask('The fair will begin from 27th of July and ' +
+    'will continue for 4 weeks till 18th of August. It will happen only on Saturdays and Sundays.' +
+    'I\'m sorry. I can\'t set up a reminder for it. ' +
     'My developer\'s really lazy.');
   conv.ask('Would you like to know anything else?');
   conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details'));
@@ -94,9 +93,9 @@ app.intent('Contact Details', (conv, { contactDetails }) => {
 
 // Handle the Dialogflow intent 'Recruitment Information'
 app.intent('Recruitment Information', (conv, { recruitInfo }) => {
-  if(conv.user.storage.userName){
+  if (conv.user.storage.userName) {
     conv.close(`We\'re happy to see your enthusiasm, ${conv.user.storage.userName}.`);
-  }else{
+  } else {
     conv.close('We\'re happy to see your enthusiasm!');
   }
   conv.close('Recruitment will start after the fresher\'s ban. Follow our facebook page for quick updates',
