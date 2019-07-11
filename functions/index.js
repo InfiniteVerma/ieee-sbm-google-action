@@ -12,7 +12,6 @@ const app = dialogflow({ debug: true });
 
 // Handle the Dialogflow intent named 'Default Welcome Intent'.
 app.intent('Default Welcome Intent', (conv) => {
-  conv.user.storage = {};
   const name = conv.user.storage.userName;
   if (!name) {
     conv.ask(new Permission({
@@ -23,9 +22,9 @@ app.intent('Default Welcome Intent', (conv) => {
     }));
   } else {
     conv.ask(`Welcome back, ${name}. I am the virtual assistant of IEEE Manipal. ` +
-      'I’m here to provide you information about the IEEE Student Branch Manipal. ' +
-      'Are you a fresher?'
-    );
+      'I’m here to provide you information about the IEEE Student Branch Manipal. ');
+    'Are you a fresher?'
+
     conv.ask(new Suggestions('Yes', 'No'));
   }
 });
@@ -82,7 +81,7 @@ app.intent('Default Welcome Intent - yes - yes', (conv) => {
 // If the user is a fresher but doesn't want to know more about the fresher's week
 app.intent('Default Welcome Intent - yes - no', (conv) => {
   conv.ask('Sure thing. Anything else I can interest you in?');
-  conv.ask(new Suggestions('Upcoming Events', 'Recruiment Information', 'Contact Details'));
+  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details'));
 });
 
 // Handle the Dialogflow intent 'Contact Details'
@@ -94,12 +93,12 @@ app.intent('Contact Details', (conv, { contactDetails }) => {
 // Handle the Dialogflow intent 'Recruitment Information'
 app.intent('Recruitment Information', (conv, { recruitInfo }) => {
   if (conv.user.storage.userName) {
-    conv.close(`We\'re happy to see your enthusiasm, ${conv.user.storage.userName}.`);
+    conv.ask(`We\'re happy to see your enthusiasm, ${conv.user.storage.userName}.`);
   } else {
-    conv.close('We\'re happy to see your enthusiasm!');
+    conv.ask('We\'re happy to see your enthusiasm!');
   }
-  conv.close('Recruitment will start after the fresher\'s ban. Follow our facebook page for quick updates',
-    new BasicCard(conDetails['Facebook Page']));
+  conv.ask('Recruitment will start after the fresher\'s ban. Follow our facebook page for quick updates',
+    new BasicCard(conDetails['Facebook Page']));  
 });
 
 // Handle the Dialogflow intent 'Upcoming Events'
@@ -108,8 +107,8 @@ app.intent('Upcoming Events', (conv, { upcomingEvents }) => {
 });
 
 // Handle the cancel intent
-// The last message that the assistant says
-app.intent('actions_intent_CANCEL',(conv)=>{
+// It's the last message that the assistant says before exiting
+app.intent('actions_intent_CANCEL', (conv) => {
   conv.close('Thanks for reaching out!');
 });
 
