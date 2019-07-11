@@ -12,6 +12,7 @@ const app = dialogflow({ debug: true });
 
 // Handle the Dialogflow intent named 'Default Welcome Intent'.
 app.intent('Default Welcome Intent', (conv) => {
+  conv.user.storage = {};
   const name = conv.user.storage.userName;
   if (!name) {
     conv.ask(new Permission({
@@ -70,8 +71,8 @@ app.intent('Default Welcome Intent - no', (conv) => {
 // If the user is a fresher and wants to know more about the fresher's week
 app.intent('Default Welcome Intent - yes - yes', (conv) => {
   conv.ask('The fair will begin from 27th of July and ' +
-    'will continue for 4 weeks till 18th of August. It will happen only on Saturdays and Sundays.' +
-    'I\'m sorry. I can\'t set up a reminder for it. ' +
+    'will continue for 4 weeks till 18th of August. It will happen only on Saturdays and Sundays. ' +
+    'I\'m sorry but I can\'t set up a reminder for you. ' +
     'My developer\'s really lazy.');
   conv.ask('Would you like to know anything else?');
   conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details'));
@@ -87,7 +88,7 @@ app.intent('Default Welcome Intent - yes - no', (conv) => {
 // Handle the Dialogflow intent 'Contact Details'
 app.intent('Contact Details', (conv, { contactDetails }) => {
   //conv.close('I have no contact details at the moment. Kindly come back later.');
-  conv.close(`Here's the upcoming event`, new BasicCard(conDetails['Facebook Page']));
+  conv.close(`We recommend following our facebook page for receiving quick updates.`, new BasicCard(conDetails['Facebook Page']));
 });
 
 // Handle the Dialogflow intent 'Recruitment Information'
@@ -135,17 +136,10 @@ const conDetails = {
   }
 }
 
-//No intent doesn't work yet
-app.intent('No Input', (conv) => {
-  const repromptCount = parseInt(conv.arguments.get('REPROMPT_COUNT'));
-  if (repromptCount === 0) {
-  conv.ask(`What was that?`);
-  } else if (repromptCount === 1) {
-  conv.ask(`Sorry I didn't catch that. Could you repeat yourself?`);
-  } else if (conv.arguments.get('IS_FINAL_REPROMPT')) {
-  conv.close(`Okay let's try this again later.`);
-  }
+app.intent('actions_intent_CANCEL',(conv)=>{
+  conv.close('Thanks for reaching out!');
 });
+
 
 exports.yourAction = functions.https.onRequest(app);
 
