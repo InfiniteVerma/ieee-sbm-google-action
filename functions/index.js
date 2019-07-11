@@ -22,8 +22,8 @@ app.intent('Default Welcome Intent', (conv) => {
     }));
   } else {
     conv.ask(`Welcome back, ${name}. I am the virtual assistant of IEEE Manipal. ` +
-      'I’m here to provide you information about the IEEE Student Branch Manipal. ');
-    'Are you a fresher?'
+      'I’m here to provide you information about the IEEE Student Branch Manipal. ' +
+    'Are you a fresher?');
 
     conv.ask(new Suggestions('Yes', 'No'));
   }
@@ -72,8 +72,7 @@ app.intent('Default Welcome Intent - yes - yes', (conv) => {
   conv.ask('The fair will begin from 27th of July and ' +
     'will continue for 4 weeks till 18th of August. It will happen only on Saturdays and Sundays. ' +
     'I\'m sorry but I can\'t set up a reminder for you. ' +
-    'My developer\'s really lazy.');
-  conv.ask('Would you like to know anything else?');
+    'My developer\'s really lazy. Would you like to know anything else?');
   conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details'));
 });
 
@@ -93,17 +92,22 @@ app.intent('Contact Details', (conv, { contactDetails }) => {
 // Handle the Dialogflow intent 'Recruitment Information'
 app.intent('Recruitment Information', (conv, { recruitInfo }) => {
   if (conv.user.storage.userName) {
-    conv.ask(`We\'re happy to see your enthusiasm, ${conv.user.storage.userName}.`);
+    conv.close(`We\'re happy to see your enthusiasm, ${conv.user.storage.userName}. `);
   } else {
-    conv.ask('We\'re happy to see your enthusiasm!');
+    conv.close('We\'re happy to see your enthusiasm! ');
   }
-  conv.ask('Recruitment will start after the fresher\'s ban. Follow our facebook page for quick updates',
+  conv.close(' Recruitment will start after the fresher\'s ban. Follow our facebook page for quick updates',
     new BasicCard(conDetails['Facebook Page']));  
 });
 
 // Handle the Dialogflow intent 'Upcoming Events'
 app.intent('Upcoming Events', (conv, { upcomingEvents }) => {
-  conv.close(`Here's the upcoming event`, new BasicCard(upEvents['Fresher\'s Week']));
+  if(conv.user.storage.userName){
+    conv.close(`We hope we see you at our upcoming event, ${conv.user.storage.userName}. Bring your friends as well! `);
+  }else{
+    conv.close('We hope we see you at our upcoming event. Bring your friends as well! ');
+  }
+  conv.close(new BasicCard(upEvents['Fresher\'s Week']));
 });
 
 // Handle the cancel intent
