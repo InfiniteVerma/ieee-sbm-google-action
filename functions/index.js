@@ -17,7 +17,7 @@ app.intent('Default Welcome Intent', (conv) => {
   if (!name) {
     conv.ask(new Permission({
       context: 'Hello. I am the virtual assistant of IEEE Manipal. ' +
-        'I’m here to provide you information about the IEEE Student Branch Manipal. ' +
+        'I’m here to provide you information regarding this community. ' +
         'To get to know you better',
       permissions: 'NAME'
     }));
@@ -107,6 +107,27 @@ app.intent('Upcoming Events', (conv, { upcomingEvents }) => {
   conv.close(`Here's the upcoming event`, new BasicCard(upEvents['Fresher\'s Week']));
 });
 
+// Handle the cancel intent
+// The last message that the assistant says
+app.intent('actions_intent_CANCEL',(conv)=>{
+  conv.close('Thanks for reaching out!');
+});
+
+// Handle the Dialogflow NO_INPUT intent.
+// Triggered when the user doesn't provide input to the Action
+app.intent('actions_intent_NO_INPUT', (conv) => {
+  // Use the number of reprompts to vary response
+  const repromptCount = parseInt(conv.arguments.get('REPROMPT_COUNT'));
+  if (repromptCount === 0) {
+    conv.ask('I missed what you said. Please repeat.');
+  } else if (repromptCount === 1) {
+    conv.ask(`Could you say that again?`);
+  } else if (conv.arguments.get('IS_FINAL_REPROMPT')) {
+    conv.close(`Sorry we're having trouble. I blame my developer Let's ` +
+      `try this again later. Goodbye.`);
+  }
+});
+
 const upEvents = {
   'Fresher\'s Week': {
     title: 'Fresher\'s Week',
@@ -135,11 +156,6 @@ const conDetails = {
     display: 'WHITE',
   }
 }
-
-app.intent('actions_intent_CANCEL',(conv)=>{
-  conv.close('Thanks for reaching out!');
-});
-
 
 exports.yourAction = functions.https.onRequest(app);
 
