@@ -86,34 +86,37 @@ app.intent('Default Welcome Intent - yes - no', (conv) => {
 // Handle the Dialogflow intent 'Contact Details'
 app.intent('Contact Details', (conv, { contactDetails }) => {
   //conv.close('I have no contact details at the moment. Kindly come back later.');
-  conv.close(`We recommend following our facebook page for receiving quick updates.`, new BasicCard(conDetails['Facebook Page']));
+  conv.ask(`We recommend following our facebook page for receiving quick updates.`, new BasicCard(conDetails['Facebook Page']));
+  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details'));
 });
 
 // Handle the Dialogflow intent 'Recruitment Information'
 app.intent('Recruitment Information', (conv, { recruitInfo }) => {
   if (conv.user.storage.userName) {
-    conv.close(`We\'re happy to see your enthusiasm, ${conv.user.storage.userName}. `);
+    conv.ask(`We\'re happy to see your enthusiasm, ${conv.user.storage.userName}. `);
   } else {
-    conv.close('We\'re happy to see your enthusiasm! ');
+    conv.ask('We\'re happy to see your enthusiasm! ');
   }
-  conv.close(' Recruitment will start after the fresher\'s ban. Follow our facebook page for quick updates',
+  conv.ask(' Recruitment will start after the fresher\'s ban. Follow our facebook page for quick updates',
     new BasicCard(conDetails['Facebook Page']));  
+  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details'));
 });
 
 // Handle the Dialogflow intent 'Upcoming Events'
 app.intent('Upcoming Events', (conv, { upcomingEvents }) => {
   if(conv.user.storage.userName){
-    conv.close(`We hope we see you at our upcoming event, ${conv.user.storage.userName}. Bring your friends as well! `);
+    conv.ask(`We hope we see you at our upcoming event, ${conv.user.storage.userName}. Bring your friends as well! `);
   }else{
-    conv.close('We hope we see you at our upcoming event. Bring your friends as well! ');
+    conv.ask('We hope we see you at our upcoming event. Bring your friends as well! ');
   }
-  conv.close(new BasicCard(upEvents['Fresher\'s Week']));
+  conv.ask(new BasicCard(upEvents['Fresher\'s Week']));
+  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details'));
 });
 
 // Handle the cancel intent
 // It's the last message that the assistant says before exiting
 app.intent('actions_intent_CANCEL', (conv) => {
-  conv.close('Thanks for reaching out!');
+  conv.close('Thanks for reaching out! We\'ll see you at our next event.');
 });
 
 // Handle the Dialogflow NO_INPUT intent.
