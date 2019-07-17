@@ -23,8 +23,7 @@ app.intent('Default Welcome Intent', (conv) => {
   } else {
     conv.ask(`Welcome back, ${name}. I am the virtual assistant of IEEE Manipal. ` +
       'I’m here to provide you information about the IEEE Student Branch Manipal. ' +
-    'Are you a fresher?');
-
+      'Are you a fresher?');
     conv.ask(new Suggestions('Yes', 'No'));
   }
 });
@@ -63,31 +62,32 @@ app.intent('Default Welcome Intent - no', (conv) => {
   } else {
     conv.ask('Okay senior. Welcome back to Manipal! Anything I can interest you in?');
   }
-  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details'));
+  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details', 'Exit'));
 });
 
 // Handle the Dialogflow follow up intent 'Yes' of the previous 'Yes' intent
 // If the user is a fresher and wants to know more about the fresher's week
 app.intent('Default Welcome Intent - yes - yes', (conv) => {
-  conv.ask('The fair will begin from 27th of July and ' +
-    'will continue for 4 weeks till 18th of August. It will happen only on Saturdays and Sundays. ' +
-    'I\'m sorry but I can\'t set up a reminder for you. ' +
+  conv.ask('The fair will start from 1st August itself ' +
+    'after the college reopens and will continue for 4 days. ' +
+    'It will be held from 5:45 pm to 9:00 pm. '+
+    'I\'m sorry. I can\'t set up a reminder for the event. ' +
     'My developer\'s really lazy. Would you like to know anything else?');
-  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details'));
+  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details', 'Exit'));
 });
 
 // Handle the Dialogflow follow up intent 'No' of the previous 'Yes' intent
 // If the user is a fresher but doesn't want to know more about the fresher's week
 app.intent('Default Welcome Intent - yes - no', (conv) => {
   conv.ask('Sure thing. Anything else I can interest you in?');
-  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details'));
+  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details', 'Exit'));
 });
 
 // Handle the Dialogflow intent 'Contact Details'
 app.intent('Contact Details', (conv, { contactDetails }) => {
   //conv.close('I have no contact details at the moment. Kindly come back later.');
-  conv.ask(`We recommend following our facebook page for receiving quick updates.`, new BasicCard(conDetails['Facebook Page']));
-  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details'));
+  conv.ask(`Drop a message at our facebook page. One of our human members will get back to you soon.`, new BasicCard(conDetails['Facebook Page']));
+  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details', 'Exit'));
 });
 
 // Handle the Dialogflow intent 'Recruitment Information'
@@ -98,19 +98,19 @@ app.intent('Recruitment Information', (conv, { recruitInfo }) => {
     conv.ask('We\'re happy to see your enthusiasm! ');
   }
   conv.ask(' Recruitment will start after the fresher\'s ban. Follow our facebook page for quick updates',
-    new BasicCard(conDetails['Facebook Page']));  
-  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details'));
+    new BasicCard(conDetails['Facebook Page']));
+  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details', 'Exit'));
 });
 
 // Handle the Dialogflow intent 'Upcoming Events'
 app.intent('Upcoming Events', (conv, { upcomingEvents }) => {
-  if(conv.user.storage.userName){
+  if (conv.user.storage.userName) {
     conv.ask(`We hope we see you at our upcoming event, ${conv.user.storage.userName}. Bring your friends as well! `);
-  }else{
+  } else {
     conv.ask('We hope we see you at our upcoming event. Bring your friends as well! ');
   }
   conv.ask(new BasicCard(upEvents['Fresher\'s Week']));
-  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details'));
+  conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details', 'Exit'));
 });
 
 // Handle the cancel intent
@@ -137,7 +137,8 @@ app.intent('actions_intent_NO_INPUT', (conv) => {
 const upEvents = {
   'Fresher\'s Week': {
     title: 'Fresher\'s Week',
-    text: 'From 27th July to 18th August on Saturdays and Sundays',
+    text: '5:45 pm to 9:00 pm',
+    subtitle: '1st to 4th August',
     image: {
       url: 'https://mocah.org/thumbs/125206-crystals-material-design-colorful-minimal-4k.jpg',
       accessibilityText: 'Fresher\'s Week Image',
@@ -157,7 +158,7 @@ const conDetails = {
     },],
     image: {
       url: 'https://mocah.org/thumbs/125206-crystals-material-design-colorful-minimal-4k.jpg',
-      accessibilityText: 'Fresher\'s Week Image',
+      accessibilityText: 'Contact Details Image',
     },
     display: 'WHITE',
   }
