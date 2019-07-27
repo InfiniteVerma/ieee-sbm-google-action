@@ -68,9 +68,9 @@ app.intent('Default Welcome Intent - no', (conv) => {
 // Handle the Dialogflow follow up intent 'Yes' of the previous 'Yes' intent
 // If the user is a fresher and wants to know more about the fresher's week
 app.intent('Default Welcome Intent - yes - yes', (conv) => {
-  conv.ask('The fair will start from 1st August itself ' +
-    'after the college reopens and will continue for 4 days. ' +
-    'It will be held from 5:45 pm to 9:00 pm. '+
+  conv.ask('The fair will start from 31st July itself ' +
+    'after the college reopens and will be held till 5th of August. ' +
+    'It will be held from 6:00 pm to 8:00 pm. '+
     'I\'m sorry. I can\'t set up a reminder for the event. ' +
     'My developer\'s really lazy. Would you like to know anything else?');
   conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details', 'Exit'));
@@ -97,7 +97,7 @@ app.intent('Recruitment Information', (conv, { recruitInfo }) => {
   } else {
     conv.ask('We\'re happy to see your enthusiasm! ');
   }
-  conv.ask(' Recruitment will start after the fresher\'s ban. Follow our facebook page for quick updates',
+  conv.ask(' Recruitment will start after the fresher\'s ban. Follow our facebook page for quick updates.',
     new BasicCard(conDetails['Facebook Page']));
   conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details', 'Exit'));
 });
@@ -137,8 +137,8 @@ app.intent('actions_intent_NO_INPUT', (conv) => {
 const upEvents = {
   'Fresher\'s Week': {
     title: 'Fresher\'s Week',
-    text: '5:45 pm to 9:00 pm',
-    subtitle: '1st to 4th August',
+    text: '6:00 pm to 8:00 pm',
+    subtitle: '31st July to 5th August',
     image: {
       url: 'https://mocah.org/thumbs/125206-crystals-material-design-colorful-minimal-4k.jpg',
       accessibilityText: 'Fresher\'s Week Image',
