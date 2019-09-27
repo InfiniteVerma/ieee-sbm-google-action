@@ -44,12 +44,12 @@ app.intent('actions_intent_PERMISSION', (conv, params, permissionGranted) => {
 //Handle the Dialogflow follow up intent 'Yes' of Default Welcome Intent
 // The user says 'yes' if he/she is a fresher
 app.intent('Default Welcome Intent - yes', (conv) => {
-  conv.ask('A warm welcome to Manipal from the entire IEEE Manipal Branch! ' +
-    'We are participating in the Fresher’s Fair to introduce our club.' + ' ');
+  conv.ask('Greetings from the entire IEEE SBM community! ' +
+    'We are the student chapter of the largest technical organization in the world. And we\'re recruiting! ' + ' ');
   if (conv.user.storage.userName) {
-    conv.ask(`Would you like to know more about the fair, ${conv.user.storage.userName}?`);
+    conv.ask(` Would you like to know more about this awesome community, ${conv.user.storage.userName}?`);
   } else {
-    conv.ask('Would you like to know more about the fair?');
+    conv.ask(' Would you like to know more about this awesome community?');
   }
   conv.ask(new Suggestions('Yes', 'No'));
 });
@@ -68,11 +68,11 @@ app.intent('Default Welcome Intent - no', (conv) => {
 // Handle the Dialogflow follow up intent 'Yes' of the previous 'Yes' intent
 // If the user is a fresher and wants to know more about the fresher's week
 app.intent('Default Welcome Intent - yes - yes', (conv) => {
-  conv.ask('The fair will start from 31st July itself ' +
-    'after the college reopens and will be held till 5th of August. ' +
-    'It will be held from 6:00 pm to 8:00 pm. '+
-    'I\'m sorry. I can\'t set up a reminder for the event. ' +
-    'My developer\'s really lazy. Would you like to know anything else?');
+  conv.ask('IEEE SBM is a multidomain community ' +
+    'where students from different backgrounds ' +
+    'work on projects ranging from computer science '+
+    'fields to electronics. ' +
+    'Would you like to know anything else?');
   conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details', 'Exit'));
 });
 
@@ -86,7 +86,7 @@ app.intent('Default Welcome Intent - yes - no', (conv) => {
 // Handle the Dialogflow intent 'Contact Details'
 app.intent('Contact Details', (conv, { contactDetails }) => {
   //conv.close('I have no contact details at the moment. Kindly come back later.');
-  conv.ask(`Drop a message at our facebook page. One of our human members will get back to you soon.`, new BasicCard(conDetails['Facebook Page']));
+  conv.ask(`Drop a message at our facebook or instagram page. One of our human members will get back to you soon.`, new BasicCard(conDetails['Facebook Page']));
   conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details', 'Exit'));
 });
 
@@ -97,7 +97,9 @@ app.intent('Recruitment Information', (conv, { recruitInfo }) => {
   } else {
     conv.ask('We\'re happy to see your enthusiasm! ');
   }
-  conv.ask(' Recruitment will start after the fresher\'s ban. Follow our facebook page for quick updates.',
+  conv.ask(' Thursday, 19th is the last day of WC recruitments! ' +
+  'If you\'re interested in learning, making friends and enjoying ' +
+  'college life to the fullest, do come to the recruitments.',
     new BasicCard(conDetails['Facebook Page']));
   conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details', 'Exit'));
 });
@@ -105,9 +107,11 @@ app.intent('Recruitment Information', (conv, { recruitInfo }) => {
 // Handle the Dialogflow intent 'Upcoming Events'
 app.intent('Upcoming Events', (conv, { upcomingEvents }) => {
   if (conv.user.storage.userName) {
-    conv.ask(`We hope we see you at our upcoming event, ${conv.user.storage.userName}. Bring your friends as well! `);
+    conv.ask(`We're planning a plethora of events for you this semester, ${conv.user.storage.userName}.  `+
+    `Stay tuned and follow our insta and facebook to get the latest updates. `);
   } else {
-    conv.ask('We hope we see you at our upcoming event. Bring your friends as well! ');
+    conv.ask('We\'re planning a plethora of events for you this semester. '+
+    'Stay tuned and follow our insta and facebook to get the latest updates. ');
   }
   conv.ask(new BasicCard(upEvents['Fresher\'s Week']));
   conv.ask(new Suggestions('Upcoming Events', 'Recruitment Information', 'Contact Details', 'Exit'));
@@ -136,12 +140,12 @@ app.intent('actions_intent_NO_INPUT', (conv) => {
 
 const upEvents = {
   'Fresher\'s Week': {
-    title: 'Fresher\'s Week',
-    text: '6:00 pm to 8:00 pm',
-    subtitle: '31st July to 5th August',
+    title: 'WC Recruitments',
+    text: '5:45 pm to 8:00 pm',
+    subtitle: '17th to 19th September',
     image: {
       url: 'https://mocah.org/thumbs/125206-crystals-material-design-colorful-minimal-4k.jpg',
-      accessibilityText: 'Fresher\'s Week Image',
+      accessibilityText: 'WC Recruitments Image',
     },
     display: 'WHITE',
   },
@@ -149,11 +153,11 @@ const upEvents = {
 
 const conDetails = {
   'Facebook Page': {
-    title: 'Facebook Page',
+    title: 'Instagram Page',
     buttons: [{
       title: 'URL to page',
       openUrlAction: {
-        url: 'https://www.facebook.com/ieeesbmanipal/?ref=br_rs',
+        url: 'https://www.instagram.com/ieeesbm/',
       }
     },],
     image: {
@@ -161,7 +165,7 @@ const conDetails = {
       accessibilityText: 'Contact Details Image',
     },
     display: 'WHITE',
-  }
+  },
 }
 
 exports.yourAction = functions.https.onRequest(app);
