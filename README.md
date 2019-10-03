@@ -11,3 +11,5 @@ This is the IEEE Manipal Google Assistant codebase. Build using Node-js and Dial
 - Link it to your Firebase account
 - Deploy it using the command line arguments given in the Google Codelabs
 
+### **Mind Map Representation**
+![Alt Text](Images/assistant-mind-map.png)
